@@ -6,7 +6,7 @@ const manager = new ProductManager('./products.json');
 // Initial state
 try {
     console.log('PRODUCTOS EN ESTADO INICIAL');
-    let products = await manager.getProducts();
+    const products = await manager.getProducts();
     console.log(products, '\n');
 } catch (error) {
     console.log(`${error}\n`)
@@ -18,7 +18,7 @@ try {
     await manager.addProduct('producto1', 'descripcion1', 1, 'imagen1', 'a1b1', 10);
     await manager.addProduct('producto2', 'descripcion2', 2, 'imagen2', 'a2b2', 20);
     await manager.addProduct('producto3', 'descripcion3', 3, 'imagen3', 'a3b3', 30);
-    products = await manager.getProducts();
+    const products = await manager.getProducts();
     console.log(products, '\n');
 } catch (error) {
     console.log(`${error}\n`)
@@ -53,7 +53,7 @@ try {
 try {
     console.log('MODIFICO UN PRODUCTO');
     await manager.updateProduct(0, { title: 'producto1 modificado', description: 'descripcion1 modificada', stock: 100 });
-    products = await manager.getProducts();
+    const products = await manager.getProducts();
     console.log(products, '\n');
 } catch (error) {
     console.log(`${error}\n`)
@@ -63,7 +63,7 @@ try {
 try {
     console.log('ELIMINO UN PRODUCTO');
     await manager.removeProduct(1);
-    products = await manager.getProducts();
+    const products = await manager.getProducts();
     console.log(products, '\n');
 } catch (error) {
     console.log(`${error}\n`)

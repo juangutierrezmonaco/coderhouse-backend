@@ -1,0 +1,30 @@
+{
+    "name": "entregas-backend",
+    "version": "1.0.0",
+    "description": "En este repositorio se subirán las entregas del curso de Desarrollo Backend de Coderhouse.",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "nodemon": "nodemon --inspect index.js"
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "products.json"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/juangutierrezmonaco/coderhouse-backend.git"
+    },
+    "keywords": [],
+    "author": "Juan Manuel Gutierrez Monaco",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/juangutierrezmonaco/coderhouse-backend/issues"
+    },
+    "homepage": "https://github.com/juangutierrezmonaco/coderhouse-backend#readme",
+    "devDependencies": {
+        "nodemon": "^2.0.20"
+    }
+}

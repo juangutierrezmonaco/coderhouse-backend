@@ -1,4 +1,4 @@
-import { ProductManager } from './js/ProductManager.js';
+import { ProductManager } from './ProductManager.js';
 
 /* --------------------------------- TESTING -------------------------------- */
 const manager = new ProductManager('./products.json');

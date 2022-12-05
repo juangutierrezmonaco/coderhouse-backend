@@ -2,11 +2,11 @@
     "name": "entregas-backend",
     "version": "1.0.0",
     "description": "En este repositorio se subirán las entregas del curso de Desarrollo Backend de Coderhouse.",
-    "main": "index.js",
+    "main": "./src/app.js",
     "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "nodemon": "nodemon --inspect index.js"
+        "start": "nodemon --inspect ./src/app.js"
     },
     "nodemonConfig": {
         "ignore": [
@@ -26,5 +26,8 @@
     "homepage": "https://github.com/juangutierrezmonaco/coderhouse-backend#readme",
     "devDependencies": {
         "nodemon": "^2.0.20"
+    },
+    "dependencies": {
+        "express": "^4.18.2"
     }
 }

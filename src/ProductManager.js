@@ -60,8 +60,8 @@ export class ProductManager {
 
     async removeProduct(id) {
         // Search the product with getProductById to throw the excepctions in case of error
-        const product = await this.getProductById(id);  
-        
+        const product = await this.getProductById(id);
+
         this.products = this.products.filter(product => product.id !== id); // Modify the array
 
         await this.#writeProducts();    // Save to file
@@ -75,8 +75,12 @@ export class ProductManager {
     }
 
     #createFile() {
-        // If the file doesn't exist, create it
-        !fs.existsSync(this.path) && fs.writeFileSync(this.path, '[]');
+        try {
+            // If the file doesn't exist, create it
+            !fs.existsSync(this.path) && fs.writeFileSync(this.path, '[]');
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 
     async #readProducts() {

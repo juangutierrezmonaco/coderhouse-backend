@@ -1,23 +1,32 @@
 import fs from 'fs';
+import { resolve } from 'path';
+
+import { Product } from './Product.js';
 
 export class ProductManager {
-    constructor(path = './file.json') {
+    constructor(fileName = './file.json') {
         this.products = [];
-        this.path = path;
+        this.path = resolve('src/json_files', fileName);
         this.#createFile(); // create the file if it doesn't exist
     }
 
-    async addProduct(title, description, price, thumbnail, code, stock) {
+    async addProduct({title, description, code, price, status, stock, category, thumbnails}) {
         // Get data from file
         await this.#readProducts();
 
         const alreadyExists = this.products.some(product => product.code === code);
         if (!alreadyExists) {
-            const id = this.products.length;
+            const id = String(this.products.length);
+            
             // Add to local array
-            this.products.push({ title, description, price, thumbnail, code, stock, id });
+            const newProduct = new Product({title, description, code, price, status, stock, category, thumbnails, id});
+            this.products.push(newProduct);
+
             // Save to file
             await this.#writeProducts();
+            
+            // Return the product added
+            return this.products.at(-1);
         } else {
             throw new Error(`El producto de código ${code} ya existe.`);
         }
@@ -38,24 +47,18 @@ export class ProductManager {
         if (id === undefined) throw new Error(`Debe ingresar un id para modificar un producto.`);
 
         const product = await this.getProductById(id);
-        const modifiedProduct = {
-            ...product,         // Get all attributes from the original product
-            ...modifiedFields,  // Modified the attributes updated
-            id: product.id      // In case the id were passed modified, ignores it and leaves the original one
-        }
-
-        // In case some attributes were passed modifiedFields that doesn't exist in the product, removes them
-        for (const key in modifiedProduct) {
-            if (!Object.hasOwnProperty.call(product, key)) {
-                delete modifiedProduct[key];
+        
+        // Modified those fields that are in product except for id
+        for (const key in product) {
+            if (Object.hasOwnProperty.call(modifiedFields, key) && key !== 'id' && modifiedFields[key] !== undefined) {
+                product[key] = modifiedFields[key]
             }
         }
 
-        // Update the product
-        Object.assign(product, modifiedProduct);
-
         // Save to file
         await this.#writeProducts();
+
+        return product;
     }
 
     async removeProduct(id) {

@@ -4,7 +4,7 @@ import { resolve } from 'path';
 import { Product } from './Product.js';
 
 export class ProductManager {
-    constructor(fileName = './file.json') {
+    constructor(fileName = './products.json') {
         this.products = [];
         this.path = resolve('src/json_files', fileName);
         this.#createFile(); // create the file if it doesn't exist
@@ -15,11 +15,9 @@ export class ProductManager {
         await this.#readProducts();
 
         const alreadyExists = this.products.some(product => product.code === code);
-        if (!alreadyExists) {
-            const id = String(this.products.length);
-            
+        if (!alreadyExists) {            
             // Add to local array
-            const newProduct = new Product({title, description, code, price, status, stock, category, thumbnails, id});
+            const newProduct = new Product({title, description, code, price, status, stock, category, thumbnails});
             this.products.push(newProduct);
 
             // Save to file
@@ -44,8 +42,6 @@ export class ProductManager {
     }
 
     async updateProduct(id, modifiedFields) {
-        if (id === undefined) throw new Error(`Debe ingresar un id para modificar un producto.`);
-
         const product = await this.getProductById(id);
         
         // Modified those fields that are in product except for id
@@ -62,14 +58,13 @@ export class ProductManager {
     }
 
     async removeProduct(id) {
-        // Search the product with getProductById to throw the excepctions in case of error
         const product = await this.getProductById(id);
 
         this.products = this.products.filter(product => product.id !== id); // Modify the array
 
         await this.#writeProducts();    // Save to file
 
-        return product; // Return the product in case of need to use the removed product
+        return product; // Return the product in case of need to use it
     }
 
     async getProducts() {

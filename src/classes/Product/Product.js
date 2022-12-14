@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 
 export class Product {
-    constructor({title, description, code, price, status = true, stock, category, thumbnails = [], id}) {
+    constructor({title, description, code, price, status = true, stock, category, thumbnails = []}) {
         this.title = title;
         this.description = description;
         this.code = code;
@@ -10,7 +10,6 @@ export class Product {
         this.stock = stock;
         this.category = category;
         this.thumbnails = thumbnails;
-        this.id = id;
-        // const this.id = nanoid(4);
+        this.id = nanoid(6);
     }
 }

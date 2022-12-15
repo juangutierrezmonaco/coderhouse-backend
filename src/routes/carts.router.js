@@ -14,22 +14,23 @@ cartsRouter.get('/', async (req, res) => {  // Get all carts
     }
 })
 
-cartsRouter.post('/', async (req, res) => {  // Create a new cart with products or empty
-    const { products } = req.body;
-
+cartsRouter.post('/', async (req, res) => {  // Create a new cart 
     try {
-        const newCart = await manager.addCart(products);
+        const newCart = await manager.addCart();
         res.status(201).json(newCart);
     } catch (error) {
         res.status(409).json({ error: error.message });
     }
 });
 
-cartsRouter.get('/:cid', async (req, res) => {  // Get the products of a specific cart
+cartsRouter.get('/:cid?', async (req, res) => {  // Get the products of a specific cart
     const { cid } = req.params;
 
+    // If fullInfo is passed on query, it brings all data from products
+    const { fullInfo } = req.query;
+
     try {
-        const products = await manager.getProductsOfCart(cid);
+        const products = await manager.getProductsOfCart(cid, fullInfo !== undefined);
         res.status(200).json(products);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -59,18 +60,7 @@ cartsRouter.post('/:cid/product/:pid', async (req, res) => {  // Add a product t
     }
 });
 
-cartsRouter.delete('/:cid/product/:pid', async (req, res) => {  // Delete a product from a specific cart
-    const { cid, pid } = req.params;
-
-    try {
-        const deletedProduct = await manager.removeProductFromCart(cid, pid);
-        res.status(200).json(deletedProduct);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
-
-cartsRouter.put('/:cid/product/:pid', async (req, res) => {
+cartsRouter.put('/:cid/product/:pid', async (req, res) => {     // Modify a product's quantity in a specific cart
     const { cid, pid } = req.params;
     const { quantity } = req.body;
 
@@ -82,7 +72,7 @@ cartsRouter.put('/:cid/product/:pid', async (req, res) => {
     }
 });
 
-cartsRouter.delete('/:cid/product/:pid', async (req, res) => {
+cartsRouter.delete('/:cid/product/:pid', async (req, res) => {  // Delete a product from a specific cart
     const { cid, pid } = req.params;
 
     try {

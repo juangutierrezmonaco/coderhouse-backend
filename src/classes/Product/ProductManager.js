@@ -38,7 +38,7 @@ export class ProductManager {
         const product = this.products.find(product => product.id === id);
 
         if (product) return product;
-        throw new Error(`No se ha encontrado el producto de ID: ${id}.`);
+        throw new Error(`No existe el producto de ID: ${id}.`);
     }
 
     async updateProduct(id, modifiedFields) {

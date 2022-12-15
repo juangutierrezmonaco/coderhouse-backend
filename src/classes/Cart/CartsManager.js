@@ -12,12 +12,12 @@ export class CartsManager {
 
     /*  --- Carts modifications --- */
 
-    async addCart(products) {
+    async addCart() {
         // Get data from file
         await this.#readCarts();
 
         // Add to local array
-        const newCart = new Cart(products);
+        const newCart = new Cart();
         this.carts.push(newCart);
 
         // Save to file
@@ -55,9 +55,20 @@ export class CartsManager {
 
     /*  --- Products in cart modifications --- */
 
-    async getProductsOfCart(id) {
+    async getProductsOfCart(id, fullInfo = false) {
         const cart = await this.getCartById(id);
-        return cart.products;
+        if (fullInfo) {
+            const products = [];
+            for (const product of cart.products) {
+                const productData = await cart.getProductData(product.productId);
+                products.push(productData);
+            }
+            
+            return products;
+        } else {
+            return cart.products;
+        }
+        
     }
 
     async addProductToCart(cartId, productId, quantity = 1) {
@@ -65,7 +76,7 @@ export class CartsManager {
 
         // Get cart and add the product to it
         const cart = await this.getCartById(cartId);
-        const product = cart.addProduct(productId, quantity);
+        const product = await cart.addProduct(productId, quantity);
 
         // Save to file
         await this.#writeCarts();

@@ -79,7 +79,7 @@ export class CartsManager {
 
         // Get cart and add the product to it
         const cart = await this.getCartById(cartId);
-        const product = cart.updateQuantity(cartId, productId, newQuantity);
+        const product = cart.updateQuantity(productId, newQuantity);
 
         // Save to file
         await this.#writeCarts();

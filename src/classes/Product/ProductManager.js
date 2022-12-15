@@ -10,19 +10,19 @@ export class ProductManager {
         this.#createFile(); // create the file if it doesn't exist
     }
 
-    async addProduct({title, description, code, price, status, stock, category, thumbnails}) {
+    async addProduct({ title, description, code, price, status, stock, category, thumbnails }) {
         // Get data from file
         await this.#readProducts();
 
         const alreadyExists = this.products.some(product => product.code === code);
-        if (!alreadyExists) {            
+        if (!alreadyExists) {
             // Add to local array
-            const newProduct = new Product({title, description, code, price, status, stock, category, thumbnails});
+            const newProduct = new Product({ title, description, code, price, status, stock, category, thumbnails });
             this.products.push(newProduct);
 
             // Save to file
             await this.#writeProducts();
-            
+
             // Return the product added
             return this.products.at(-1);
         } else {
@@ -43,11 +43,11 @@ export class ProductManager {
 
     async updateProduct(id, modifiedFields) {
         const product = await this.getProductById(id);
-        
+
         // Modified those fields that are in product except for id
         for (const key in product) {
             if (Object.hasOwnProperty.call(modifiedFields, key) && key !== 'id' && modifiedFields[key] !== undefined) {
-                product[key] = modifiedFields[key]
+                product[key] = modifiedFields[key];
             }
         }
 

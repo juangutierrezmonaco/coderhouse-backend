@@ -27,12 +27,12 @@ export class Cart {
     }
 
     isInCart(productId) {
-        const product = getProduct(productId);
+        const product = this.getProduct(productId);
         return product ? true : false;
     }
 
     updateQuantity(productId, newQuantity) {
-        const product = getProduct(productId);
+        const product = this.getProduct(productId);
         product.quantity = newQuantity;
 
         return product;
@@ -40,7 +40,6 @@ export class Cart {
 
     removeProduct(productId) {
         const product = this.getProduct(productId);
-
         this.products = this.products.filter(product => product.productId !== productId);
 
         return product; // Return the product in case of need to use it

@@ -1,0 +1,69 @@
+[
+    {
+        "title": "Producto de prueba1",
+        "description": "Descripcion 1",
+        "code": "a1b1",
+        "price": 100,
+        "status": true,
+        "stock": 100,
+        "category": "Pruebas",
+        "thumbnails": [],
+        "id": "XcDAz4"
+    },
+    {
+        "title": "Producto de prueba2",
+        "description": "Descripcion 2",
+        "code": "a2b2",
+        "price": 200,
+        "status": true,
+        "stock": 10,
+        "category": "Pruebas",
+        "thumbnails": [],
+        "id": "IQHj3t"
+    },
+    {
+        "title": "Producto de prueba3",
+        "description": "Descripcion 3",
+        "code": "a3b3",
+        "price": 300,
+        "status": true,
+        "stock": 40,
+        "category": "Pruebas",
+        "thumbnails": [
+            "img1.jpg",
+            "img2.jpg"
+        ],
+        "id": "WJRYiG"
+    },
+    {
+        "title": "Producto de prueba4",
+        "description": "Descripcion 4",
+        "code": "a4b4",
+        "price": 300,
+        "status": true,
+        "stock": 10,
+        "category": "Pruebas",
+        "thumbnails": [
+            "img11.jpg",
+            "img22.jpg"
+        ],
+        "id": "J62S5g"
+    },
+    {
+        "title": "Producto de prueba5",
+        "description": "Descripcion 5",
+        "code": "a5b5",
+        "price": 1300,
+        "status": true,
+        "stock": 60,
+        "category": "Pruebas",
+        "thumbnails": [
+            "img51.jpg",
+            "img22342.jpg",
+            "img234sf2.jpg",
+            "img23s42.jpg",
+            "img22f342.jpg"
+        ],
+        "id": "MgZ06F"
+    }
+]

@@ -29,6 +29,7 @@ productsRouter.get('/:pid', async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+import { io } from "../app.js";
 
 productsRouter.post('/', async (req, res) => {
     const { title, description, code, price, status, stock, category, thumbnails } = req.body;
@@ -39,7 +40,12 @@ productsRouter.post('/', async (req, res) => {
     }
 
     try {
+        // Add to database
         const newProduct = await manager.addProduct({ title, description, code, price, status, stock, category, thumbnails });
+
+        // Emit to websocket
+        io.emit('addProduct', newProduct);
+        
         res.status(201).json(newProduct);
     } catch (error) {
         res.status(409).json({ error: error.message });
@@ -63,6 +69,10 @@ productsRouter.delete('/:pid', async (req, res) => {
 
     try {
         const deletedProduct = await manager.removeProduct(pid);
+
+        // Emit to websocket
+        io.emit('removeProduct', deletedProduct);
+
         res.status(200).json(deletedProduct);
     } catch (error) {
         res.status(400).json({ error: error.message });

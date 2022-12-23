@@ -1,0 +1,23 @@
+<main class="container">
+    <h1>Productos</h1>
+    <ul class="p-0">
+        {{#each products}}
+            <li id={{this.id}}>
+                <div>Título: {{this.title}}</div>
+                <div>Descripción: {{this.description}}</div>
+                <div>Código: {{this.code}}</div>
+                <div>Precio: {{this.price}}</div>
+                <div>Stock: {{this.stock}}</div>
+                <div>Categoría: {{this.category}}</div>
+                <div>ID: {{this.id}}</div>
+                {{#if this.status}}
+                    <div>Estado: Activo</div>
+                {{else}}
+                    <div>Estado: Inactivo</div>
+                {{/if}}
+
+                <hr />
+            </li>
+        {{/each}}
+    </ul>
+</main>

@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 
 import { productsRouter } from './routes/products.router.js';
 import { cartsRouter } from './routes/carts.router.js';
+import { viewsRouter } from './routes/views.router.js';
 
 /* Express setup */
 const app = express();
@@ -19,6 +20,7 @@ app.set('views', 'src/views');
 /* Routes setup */
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
+app.use('/', viewsRouter);
 
 /* Http server */
 const PORT = 8080;
@@ -27,3 +29,8 @@ httpServer.on('error', (err) => console.log(err));
 
 /* WebSocket server */
 const io = new Server(httpServer);
+io.on('connection', (socket) => {
+    console.log("Cliente conectado.");
+})
+
+export { io };

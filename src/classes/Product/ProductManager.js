@@ -6,7 +6,7 @@ import { Product } from './Product.js';
 export class ProductManager {
     constructor(fileName = './products.json') {
         this.products = [];
-        this.path = resolve('src/json_files', fileName);
+        this.path = resolve('src/database', fileName);
         this.#createFile(); // create the file if it doesn't exist
     }
 

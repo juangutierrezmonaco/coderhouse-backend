@@ -6,7 +6,7 @@ import { Cart } from './Cart.js';
 export class CartsManager {
     constructor(fileName = './carts.json') {
         this.carts = [];
-        this.path = resolve('src/json_files', fileName);
+        this.path = resolve('src/database', fileName);
         this.#createFile(); // create the file if it doesn't exist
     }
 

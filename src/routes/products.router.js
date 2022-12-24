@@ -40,6 +40,10 @@ productsRouter.post('/', async (req, res) => {
 
     try {
         const newProduct = await manager.addProduct({ title, description, code, price, status, stock, category, thumbnails });
+        
+        const io = req.app.get('websocket');    // To emit to websocket
+        io.emit('addProduct', newProduct);
+
         res.status(201).json(newProduct);
     } catch (error) {
         res.status(409).json({ error: error.message });
@@ -52,6 +56,10 @@ productsRouter.put('/:pid', async (req, res) => {
 
     try {
         const modifiedProduct = await manager.updateProduct(pid, { title, description, code, price, status, stock, category, thumbnails });
+        
+        const io = req.app.get('websocket');    // To emit to websocket
+        io.emit('updateProduct', modifiedProduct);
+
         res.status(200).json(modifiedProduct);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -63,8 +71,12 @@ productsRouter.delete('/:pid', async (req, res) => {
 
     try {
         const deletedProduct = await manager.removeProduct(pid);
+        
+        const io = req.app.get('websocket');    // To emit to websocket
+        io.emit('removeProduct', deletedProduct);
+
         res.status(200).json(deletedProduct);
-    } catch (error) {
+    } catch (error) {        
         res.status(400).json({ error: error.message });
     }
 });

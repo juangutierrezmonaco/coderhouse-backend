@@ -5,19 +5,27 @@ const viewsRouter = Router();
 const productsManager = new ProductManager();
 
 viewsRouter.get('/', async (req, res) => {    
-    const products = await productsManager.getProducts();
-    res.render('home', {
-        style: 'style.css',
-        products
-    });
+    try {
+        const products = await productsManager.getProducts();
+        res.render('home', {
+            style: 'style.css',
+            products
+        });
+    } catch (error) {        
+        res.status(400).json({ error: error.message });
+    }
 });
 
 viewsRouter.get('/realtimeproducts', async (req, res) => {
-    const products = await productsManager.getProducts();
-    res.render('realTimeProducts', {
-        style: 'style.css',
-        products
-    });
+    try {
+        const products = await productsManager.getProducts();
+        res.render('realTimeProducts', {
+            style: 'style.css',
+            products
+        });
+    } catch (error) {        
+        res.status(400).json({ error: error.message });
+    }
 });
 
 export { viewsRouter };

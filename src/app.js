@@ -29,8 +29,7 @@ httpServer.on('error', (err) => console.log(err));
 
 /* WebSocket server */
 const io = new Server(httpServer);
+app.set('websocket', io);
 io.on('connection', (socket) => {
     console.log("Cliente conectado.");
-})
-
-export { io };
+});

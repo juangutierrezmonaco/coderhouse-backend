@@ -1,10 +1,16 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io';
 
-import { productsRouter } from './routes/products.router.js';
+import { productsRouter } from './routes/product.route.js';
 import { cartsRouter } from './routes/carts.router.js';
 import { viewsRouter } from './routes/views.router.js';
+
+import './config/db.js'
+
+/* For using env variables */
+dotenv.config();
 
 /* Express setup */
 const app = express();
@@ -23,7 +29,7 @@ app.use('/api/carts', cartsRouter);
 app.use('/', viewsRouter);
 
 /* Http server */
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PORT, () => console.log(`🚀 Server started on port http://localhost:${PORT}`));
 httpServer.on('error', (err) => console.log(err));
 

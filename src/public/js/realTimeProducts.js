@@ -16,8 +16,8 @@ socket.on('updateProduct', (modifiedProduct) => {
     toast('Modificaste un producto exitosamente!', 'success');
 });
 
-socket.on('removeProduct', (deletedProduct) => {
-    const productNode = document.getElementById(deletedProduct.id);
+socket.on('removeProduct', (deletedProductId) => {
+    const productNode = document.getElementById(deletedProductId);
     scrollTo(productNode);
     productsContainer.removeChild(productNode);
     toast('Eliminaste un producto exitosamente!', 'success');

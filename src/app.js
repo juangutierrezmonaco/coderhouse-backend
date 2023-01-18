@@ -4,8 +4,8 @@ import { engine } from 'express-handlebars';
 import { Server } from 'socket.io';
 
 import { productsRouter } from './routes/product.route.js';
-import { cartsRouter } from './routes/carts.router.js';
-import { viewsRouter } from './routes/views.router.js';
+import { cartsRouter } from './routes/cart.route.js';
+/* import { viewsRouter } from './routes/views.router.js'; */
 
 import './config/db.js'
 
@@ -26,7 +26,7 @@ app.set('views', 'src/views');
 /* Routes setup */
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
-app.use('/', viewsRouter);
+/* app.use('/', viewsRouter); */
 
 /* Http server */
 const PORT = process.env.PORT || 8080;

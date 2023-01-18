@@ -1,5 +1,5 @@
 import * as ProductService from '../services/product.service.js';
-import { STATUS } from '../constants/constants.js'
+import { STATUS } from '../constants/constants.js';
 
 export async function getProducts(req, res) {
   const { limit } = req.query;
@@ -87,22 +87,22 @@ export async function updateProduct(req, res) {
 export async function deleteProduct(req, res) {
   const { pid } = req.params;
 
-    try {
-        await ProductService.deleteProduct(pid)
-        
-        const io = req.app.get('websocket');    // To emit to websocket
-        io.emit('removeProduct', pid);
+  try {
+    await ProductService.deleteProduct(pid);
 
-        res.status(200).json({
-          data: null,
-          status: STATUS.SUCCESS,
-          error: ''
-        });
-      } catch (error) {
-        res.status(400).json({
-          data: null,
-          status: STATUS.FAIL,
-          error: error.message
-        });
-      }
+    const io = req.app.get('websocket');    // To emit to websocket
+    io.emit('removeProduct', pid);
+
+    res.status(200).json({
+      data: null,
+      status: STATUS.SUCCESS,
+      error: ''
+    });
+  } catch (error) {
+    res.status(400).json({
+      data: null,
+      status: STATUS.FAIL,
+      error: error.message
+    });
+  }
 }

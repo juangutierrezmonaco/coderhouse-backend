@@ -80,10 +80,10 @@ export async function addProduct(req, res) {
   const { quantity } = req.body;
 
   try {
-    const newProduct = await CartService.addProduct(cid, pid, quantity);
+    const cart = await CartService.addProduct(cid, pid, quantity);
 
     res.status(201).json({
-      data: newProduct,
+      data: cart,
       status: STATUS.SUCCESS,
       error: ''
     });
@@ -99,12 +99,12 @@ export async function addProduct(req, res) {
 export async function updateProduct(req, res) {
   const { cid, pid } = req.params;
   const { quantity } = req.body;
-
+  
   try {
-    const modifiedProduct = await CartService.updateProduct(cid, pid, quantity);
+    const cart = await CartService.updateProduct(cid, pid, quantity);
 
     res.status(200).json({
-      data: modifiedProduct,
+      data: cart,
       status: STATUS.SUCCESS,
       error: ''
     });

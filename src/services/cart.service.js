@@ -12,11 +12,14 @@ export async function getCarts() {
 export async function getCart(cid) {
   try {
     const cart = await CartModel.findById(cid);
+    
+    if(!cart) throw new Error("Cart not found.");
     return cart;
   } catch (error) {
     throw new Error(error.message);
   }
 }
+
 export async function createCart(cartData) {
   try {
     const cart = await CartModel.create(cartData);
@@ -28,7 +31,9 @@ export async function createCart(cartData) {
 
 export async function deleteCart(cid) {
   try {
-    await CartModel.findByIdAndDelete(cid);
+    const cart = await CartModel.findByIdAndDelete(cid);
+
+    if(!cart) throw new Error("Cart not found.");
   } catch (error) {
     throw new Error(error.message);
   }
@@ -36,11 +41,11 @@ export async function deleteCart(cid) {
 
 export async function addProduct(cid, pid, quantity) {
   try {
-    const cart = await getCart(cid);
-    const product = { productId: pid, quantity }
-    cart.products.push(product)
+    const newProduct = { productId: pid, quantity }
 
-    await CartModel.findByIdAndUpdate(cid, cart, { new: true });
+    const cart = await CartModel.findByIdAndUpdate(cid, { $push: { "products": newProduct } }, { new: true });
+
+    if(!cart) throw new Error("Cart not found.");    
     return cart;
   } catch (error) {
     throw new Error(error.message);
@@ -49,7 +54,12 @@ export async function addProduct(cid, pid, quantity) {
 
 export async function updateProduct(cid, pid, quantity) {
   try {
-    await CartModel.findByIdAndDelete(cid);
+    const cart = await getCart(cid);
+    const index = cart.products.findIndex(p => p.productId === pid);
+    cart.products[index].quantity = quantity;
+    await cart.save();
+    
+    return cart;
   } catch (error) {
     throw new Error(error.message);
   }
@@ -57,7 +67,10 @@ export async function updateProduct(cid, pid, quantity) {
 
 export async function deleteProduct(cid, pid) {
   try {
-    await CartModel.findByIdAndDelete(cid);
+    const cart = await getCart(cid);
+    cart.products = cart.products.filter(p => p.productId !== pid);
+    await cart.save();
+    return cart;
   } catch (error) {
     throw new Error(error.message);
   }

@@ -1,13 +1,11 @@
-import * as ProductService from '../services/product.service.js';
+import * as MessageService from '../services/message.service.js';
 import { STATUS } from '../constants/constants.js';
 
-export async function getProducts(req, res) {
-  const { limit } = req.query;
-
+export async function getMessages(req, res) {
   try {
-    const products = await ProductService.getProducts(limit);
+    const messages = await MessageService.getMessages();
     res.status(200).json({
-      data: products,
+      data: messages,
       status: STATUS.SUCCESS,
       error: ''
     })
@@ -20,14 +18,13 @@ export async function getProducts(req, res) {
   }
 }
 
-export async function getProduct(req, res) {
-  const { pid } = req.params;
+export async function getMessage(req, res) {
+  const { mid } = req.params;
 
   try {
-    const product = await ProductService.getProduct(pid);
-
+    const message = await MessageService.getMessage(mid);
     res.status(200).json({
-      data: product,
+      data: message,
       status: STATUS.SUCCESS,
       error: ''
     })
@@ -39,16 +36,16 @@ export async function getProduct(req, res) {
     })
   }
 }
-export async function createProduct(req, res) {
+export async function createMessage(req, res) {
   try {
     const { body } = req;
-    const newProduct = await ProductService.createProduct(body)
+    const newMessage = await MessageService.createMessage(body)
 
     const io = req.app.get('websocket');    // To emit to websocket
-    io.emit('addProduct', newProduct);
+    io.emit('addMessage', newMessage);
 
     res.status(201).json({
-      data: newProduct,
+      data: newMessage,
       status: STATUS.SUCCESS,
       error: ''
     });
@@ -61,18 +58,18 @@ export async function createProduct(req, res) {
   }
 }
 
-export async function updateProduct(req, res) {
-  const { pid } = req.params;
+export async function updateMessage(req, res) {
+  const { mid } = req.params;
   const { body } = req;
 
   try {
-    const modifiedProduct = await ProductService.updateProduct(pid, body);
-
+    const modifiedMessage = await MessageService.updateMessage(mid, body);
+    
     const io = req.app.get('websocket');    // To emit to websocket
-    io.emit('updateProduct', modifiedProduct);
+    io.emit('updateMessage', modifiedMessage);
 
     res.status(200).json({
-      data: modifiedProduct,
+      data: modifiedMessage,
       status: STATUS.SUCCESS,
       error: ''
     });
@@ -85,14 +82,14 @@ export async function updateProduct(req, res) {
   }
 }
 
-export async function deleteProduct(req, res) {
-  const { pid } = req.params;
-
+export async function deleteMessage(req, res) {
+  const { mid } = req.params;
+  
   try {
-    await ProductService.deleteProduct(pid);
+    await MessageService.deleteMessage(mid);
 
     const io = req.app.get('websocket');    // To emit to websocket
-    io.emit('removeProduct', pid);
+    io.emit('removeMessage', mid);
 
     res.status(200).json({
       data: null,

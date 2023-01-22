@@ -1,4 +1,5 @@
 import { CartModel } from '../models/cart.model.js';
+import * as ProductService from './product.service.js';
 
 export async function getCarts() {
   try {
@@ -12,8 +13,8 @@ export async function getCarts() {
 export async function getCart(cid) {
   try {
     const cart = await CartModel.findById(cid);
-    
-    if(!cart) throw new Error("Cart not found.");
+
+    if (!cart) throw new Error(`The cart with the id: ${cid} doesn't exist.`);
     return cart;
   } catch (error) {
     throw new Error(error.message);
@@ -33,32 +34,51 @@ export async function deleteCart(cid) {
   try {
     const cart = await CartModel.findByIdAndDelete(cid);
 
-    if(!cart) throw new Error("Cart not found.");
+    if (!cart) throw new Error(`The cart with the id: ${cid} doesn't exist.`);
   } catch (error) {
     throw new Error(error.message);
   }
 }
 
-export async function addProduct(cid, pid, quantity) {
+export async function addProduct(cid, pid, quantity = 1) {
   try {
-    const newProduct = { productId: pid, quantity }
+    // If the product doesn't exist in the product collection, throws an error
+    await ProductService.getProduct(pid);
 
-    const cart = await CartModel.findByIdAndUpdate(cid, { $push: { "products": newProduct } }, { new: true });
+    const cart = await getCart(cid);
+    if (!cart) throw new Error(`The cart with the id: ${cid} doesn't exist.`);
 
-    if(!cart) throw new Error("Cart not found.");    
+    const index = cart.products.findIndex(p => p.productId === pid);
+    if (index >= 0) {
+      // If the product exists, adds the quantity to the previous one
+      cart.products[index].quantity += quantity;
+    } else {
+      const newProduct = { productId: pid, quantity };
+      cart.products.push(newProduct);
+    }
+
+    await cart.save();
+
     return cart;
   } catch (error) {
     throw new Error(error.message);
   }
 }
 
-export async function updateProduct(cid, pid, quantity) {
+export async function updateProduct(cid, pid, quantity = 1) {
   try {
+    // If the product doesn't exist in the product collection, throws an error
+    await ProductService.getProduct(pid);
+
     const cart = await getCart(cid);
+    if (!cart) throw new Error(`The cart with the id: ${cid} doesn't exist.`);
+
     const index = cart.products.findIndex(p => p.productId === pid);
+    if (index < 0) throw new Error(`The product with the id: ${pid} isn't in this cart.`);
+
     cart.products[index].quantity = quantity;
     await cart.save();
-    
+
     return cart;
   } catch (error) {
     throw new Error(error.message);
@@ -68,8 +88,11 @@ export async function updateProduct(cid, pid, quantity) {
 export async function deleteProduct(cid, pid) {
   try {
     const cart = await getCart(cid);
+    if (!cart) throw new Error(`The cart with the id: ${cid} doesn't exist.`);
+
     cart.products = cart.products.filter(p => p.productId !== pid);
     await cart.save();
+    
     return cart;
   } catch (error) {
     throw new Error(error.message);

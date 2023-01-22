@@ -5,6 +5,7 @@ import { Server } from 'socket.io';
 
 import { productsRouter } from './routes/product.route.js';
 import { cartsRouter } from './routes/cart.route.js';
+import { messagesRouter } from './routes/message.route.js';
 import { viewsRouter } from './routes/views.route.js';
 
 import './config/db.js'
@@ -26,6 +27,7 @@ app.set('views', 'src/views');
 /* Routes setup */
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
+app.use('/api/messages', messagesRouter);
 app.use('/', viewsRouter);
 
 /* Http server */
@@ -36,6 +38,14 @@ httpServer.on('error', (err) => console.log(err));
 /* WebSocket server */
 const io = new Server(httpServer);
 app.set('websocket', io);
-io.on('connection', () => {
-    console.log("Cliente conectado.");
+io.on('connection', (socket) => {
+  console.log("Cliente conectado.");
+
+  socket.on("disconnect", () => {
+    console.log("Cliente desconectado");
+  });
+
+  socket.on("newUser", (email) => {
+    socket.broadcast.emit("newUser", email);
+  });
 });

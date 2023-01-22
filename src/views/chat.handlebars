@@ -1,0 +1,52 @@
+<main class="container my-3">
+  <form id="message-form" class="col-4" action="">
+    <h5 class="mb-3">Ingresa tu mensaje: </h5>
+
+    <div class="mb-3">
+      <input
+        type="email"
+        class="form-control disabled"
+        id="email"
+        value="default@default.com"
+        disabled
+      />
+    </div>
+
+    <div class="form-floating mb-3">
+      <textarea
+        name="message"
+        style="height: 100px"
+        class="form-control"
+        id="message"
+        placeholder="Mensaje"
+      ></textarea>
+      <label for="message">Mensaje</label>
+    </div>
+
+    <button class="btn btn-outline-primary">Enviar mensaje</button>
+  </form>
+
+  <hr />
+  <h1>Mensajes</h1>
+
+  <ul class="p-0 mt-3" id="chat-container">
+    {{#each messages}}
+      <li id={{this._id}} class="alert alert-warning">
+        <div>Usuario: {{this.user_email}}</div>
+        <div>Mensaje: {{this.text}}</div>
+        
+        <button
+          class="badge text-bg-danger mt-2 deleteMessageButton"
+        >Eliminar</button>
+      </li>
+    {{/each}}
+
+    
+  </ul>
+</main>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/chat.js"></script>

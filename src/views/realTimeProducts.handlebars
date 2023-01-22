@@ -2,14 +2,13 @@
     <h1>Productos</h1>
     <ul class="p-0" id="products-container">
         {{#each products}}
-            <li id={{this.id}}>
+            <li id={{this._id}}>
                 <div>Título: {{this.title}}</div>
                 <div>Descripción: {{this.description}}</div>
                 <div>Código: {{this.code}}</div>
                 <div>Precio: {{this.price}}</div>
                 <div>Stock: {{this.stock}}</div>
                 <div>Categoría: {{this.category}}</div>
-                <div>ID: {{this.id}}</div>
                 {{#if this.status}}
                     <div>Estado: Activo</div>
                 {{else}}
@@ -24,4 +23,5 @@
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/utils.js"></script>
 <script src="/js/realTimeProducts.js"></script>

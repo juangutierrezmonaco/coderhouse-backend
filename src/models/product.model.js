@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 import mongooseDelete from "mongoose-delete";
 
-const schema = new mongoose.Schema(
+const schema = new Schema(
   {
     title: {
       type: String,
@@ -42,4 +42,4 @@ const schema = new mongoose.Schema(
 );
 
 schema.plugin(mongooseDelete, { deletedAt: true });
-export const ProductModel = mongoose.model('products', schema);
+export const ProductModel = model('products', schema);

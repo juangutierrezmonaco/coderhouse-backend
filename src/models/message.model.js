@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const schema = new mongoose.Schema(
+const schema = new Schema(
   {
     user_email: {
       type: String,
@@ -16,4 +16,4 @@ const schema = new mongoose.Schema(
   }
 );
 
-export const MessageModel = mongoose.model('messages', schema);
+export const MessageModel = model('messages', schema);

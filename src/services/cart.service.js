@@ -48,15 +48,15 @@ export async function addProduct(cid, pid, quantity = 1) {
     const cart = await getCart(cid);
     if (!cart) throw new Error(`The cart with the id: ${cid} doesn't exist.`);
 
-    const index = cart.products.findIndex(p => p.productId === pid);
+    const index = cart.products.findIndex(p => p.product._id.toString() === pid);
     if (index >= 0) {
       // If the product exists, adds the quantity to the previous one
       cart.products[index].quantity += quantity;
     } else {
-      const newProduct = { productId: pid, quantity };
+      const newProduct = { product: pid, quantity };
       cart.products.push(newProduct);
     }
-
+    
     await cart.save();
 
     return cart;
@@ -73,7 +73,7 @@ export async function updateProduct(cid, pid, quantity = 1) {
     const cart = await getCart(cid);
     if (!cart) throw new Error(`The cart with the id: ${cid} doesn't exist.`);
 
-    const index = cart.products.findIndex(p => p.productId === pid);
+    const index = cart.products.findIndex(p => p.product._id.toString() === pid);
     if (index < 0) throw new Error(`The product with the id: ${pid} isn't in this cart.`);
 
     cart.products[index].quantity = quantity;
@@ -90,9 +90,9 @@ export async function deleteProduct(cid, pid) {
     const cart = await getCart(cid);
     if (!cart) throw new Error(`The cart with the id: ${cid} doesn't exist.`);
 
-    cart.products = cart.products.filter(p => p.productId !== pid);
+    cart.products = cart.products.filter(p => p.product._id.toString() !== pid);
     await cart.save();
-    
+
     return cart;
   } catch (error) {
     throw new Error(error.message);

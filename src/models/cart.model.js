@@ -1,12 +1,13 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const schema = new mongoose.Schema(
+const schema = new Schema(
   {
     products: {
       type: [
         {
-          productId: {
-            type: String,
+          product: {
+            type: Schema.Types.ObjectId,
+            ref: 'products',
             unique: true,
             required: true
           },
@@ -16,6 +17,7 @@ const schema = new mongoose.Schema(
           }
         }
       ],
+      _id: false,
       default: []
     }
   },
@@ -25,4 +27,9 @@ const schema = new mongoose.Schema(
   }
 );
 
-export const CartModel = mongoose.model('carts', schema);
+schema.pre(/^find/, function (next) {
+  this.populate('products.product');
+  next();
+});
+
+export const CartModel = model('carts', schema);

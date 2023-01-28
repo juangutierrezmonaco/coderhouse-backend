@@ -2,7 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io';
-
 import { productsRouter } from './routes/product.route.js';
 import { cartsRouter } from './routes/cart.route.js';
 import { messagesRouter } from './routes/message.route.js';
@@ -23,6 +22,7 @@ app.use(express.static('src/public'));
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', 'src/views');
+
 
 /* Routes setup */
 app.use('/api/products', productsRouter);

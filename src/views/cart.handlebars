@@ -1,0 +1,25 @@
+<main class="container">
+  <h1>Productos del carrito de id {{cid}}</h1>
+  <ul class="p-0">
+    {{#each products}}
+      <li id={{this.product._id}}>
+        <div>Título: {{this.product.title}}</div>
+        <div>Descripción: {{this.product.description}}</div>
+        <div>Código: {{this.product.code}}</div>
+        <div>Precio: {{this.product.price}}</div>
+        <div>Stock: {{this.product.stock}}</div>
+        <div>Categorías: {{this.product.categories}}</div>
+        {{#if this.product.status}}
+          <div>Estado: Activo</div>
+        {{else}}
+          <div>Estado: Inactivo</div>
+        {{/if}}
+        <div>Cantidad: {{this.quantity}}</div>
+
+        <hr />
+      </li>
+    {{/each}}
+  </ul>
+</main>
+
+<script src="/js/home.js"></script>

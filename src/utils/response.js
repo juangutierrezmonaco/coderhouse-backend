@@ -6,8 +6,9 @@ export const successResponse = (data, req) => {
 
   // current url without the page query
   let currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+  currentUrl = !currentUrl.includes('?') ? `${currentUrl}?` : currentUrl;
   currentUrl = currentUrl.split('&').filter(q => !q.includes("page")).join('&');
-
+  
   return {
     status: STATUS.SUCCESS,
     payload: docs,

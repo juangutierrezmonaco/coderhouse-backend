@@ -2,7 +2,6 @@ import { ProductModel } from '../models/product.model.js';
 
 export async function getProducts({ limit = 10, page = 1, sort, category, stock }) {
   try {
-
     const query = { deleted: false }
     if(category !== undefined) query.categories = category;
     if(stock !== undefined) query.stock = { $gt: 0 };
@@ -14,7 +13,7 @@ export async function getProducts({ limit = 10, page = 1, sort, category, stock 
       sort: sort ? { price: sort} : null,
     }
 
-    const products = await ProductModel.paginate(query, paginateOptions)
+    const products = await ProductModel.paginate(query, paginateOptions);
     return products;
   } catch (error) {
     throw new Error(error.message);

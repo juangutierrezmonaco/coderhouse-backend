@@ -11,7 +11,7 @@ export async function getProducts({ limit = 10, page = 1, sort, category, stock 
       lean: true,
       limit,
       page,
-      sort: { price: sort },
+      sort: sort ? { price: sort} : null,
     }
 
     const products = await ProductModel.paginate(query, paginateOptions)

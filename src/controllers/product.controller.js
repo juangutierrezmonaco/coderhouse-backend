@@ -23,11 +23,7 @@ export async function getProduct(req, res) {
       error: ''
     })
   } catch (error) {
-    res.status(400).json({
-      data: null,
-      status: STATUS.FAIL,
-      error: error.message
-    })
+    res.status(400).json(errorResponse(error))
   }
 }
 
@@ -45,11 +41,7 @@ export async function createProduct(req, res) {
       error: ''
     });
   } catch (error) {
-    res.status(400).json({
-      data: null,
-      status: STATUS.FAIL,
-      error: error.message
-    });
+    res.status(400).json(errorResponse(error));
   }
 }
 
@@ -69,11 +61,7 @@ export async function updateProduct(req, res) {
       error: ''
     });
   } catch (error) {
-    res.status(400).json({
-      data: null,
-      status: STATUS.FAIL,
-      error: error.message
-    });
+    res.status(400).json(errorResponse(error));
   }
 }
 
@@ -92,10 +80,6 @@ export async function deleteProduct(req, res) {
       error: ''
     });
   } catch (error) {
-    res.status(400).json({
-      data: null,
-      status: STATUS.FAIL,
-      error: error.message
-    });
+    res.status(400).json(errorResponse(error));
   }
 }

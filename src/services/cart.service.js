@@ -80,7 +80,7 @@ export async function addProduct(cid, pid, quantity = 1) {
     const index = cart.products.findIndex(p => p.product._id.toString() === pid);
     if (index >= 0) {
       // If the product exists, adds the quantity to the previous one
-      cart.products[index].quantity += quantity;
+      cart.products[index].quantity += Number(quantity);
     } else {
       const newProduct = { product: pid, quantity };
       cart.products.push(newProduct);

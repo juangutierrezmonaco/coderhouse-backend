@@ -5,12 +5,12 @@ for (const addToCartForm of addToCartForms) {
 
     const pid = e.target.parentElement.id;
     const cid = e.target['cart-id'].value;
-    const quantity = e.target['quantity'].value;
+    const quantity = Number(e.target['quantity'].value);
 
     axios({
       method: 'post',
       url: `/api/carts/${cid}/products/${pid}`,
-      data: quantity
+      data: {quantity: quantity}
     })
     .then(() => {
       toast(`Tu producto se agregó correctamente!`, 'success');

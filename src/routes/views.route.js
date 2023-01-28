@@ -1,19 +1,45 @@
+import handlebars from 'handlebars';
+import helpers from 'handlebars-helpers';
+
+import * as MessageService from '../services/message.service.js';
 import { Router } from "express";
 import * as ProductService from '../services/product.service.js';
-import * as MessageService from '../services/message.service.js';
+import * as CartService from '../services/cart.service.js';
 
 const viewsRouter = Router();
 
 viewsRouter.get('/', async (req, res) => {
   try {
-    const productsResponse = await ProductService.getProducts();
+    // set the helpers
+    helpers.comparison({
+      handlebars: handlebars
+    });
 
-    // This is because handlebars for safety reasons won't allow to access directly to the response
-    const products = productsResponse.map(item => item.toObject());
+    const data = await ProductService.getProducts(req.query);
+    const { docs, prevPage, nextPage, page, totalPages } = data;
+
+    // current url without the page query
+    let currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+    currentUrl = !currentUrl.includes('?') ? `${currentUrl}?` : currentUrl;
+    currentUrl = currentUrl.split('&').filter(q => !q.includes("page")).join('&');
+
+    const links = [];
+    for (let i = 1; i <= totalPages; i++) {
+      links.push({
+        link: `${currentUrl}&page=${i}`,
+        page: i
+      })
+    }
+    const prevLink = prevPage ? `${currentUrl}&page=${prevPage}` : null;
+    const nextLink = nextPage ? `${currentUrl}&page=${nextPage}` : null;
 
     res.render('home', {
       style: 'style.css',
-      products
+      products: docs,
+      page,
+      links,
+      prevLink,
+      nextLink
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -22,14 +48,33 @@ viewsRouter.get('/', async (req, res) => {
 
 viewsRouter.get('/realtimeproducts', async (req, res) => {
   try {
-    const productsResponse = await ProductService.getProducts();
+    const productsResponse = await ProductService.getProducts(req.query);
+    const products = productsResponse.docs;
 
-    // This is because handlebars for safety reasons won't allow to access directly to the response
-    const products = productsResponse.map(item => item.toObject());
-    
     res.render('realTimeProducts', {
       style: 'style.css',
       products
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+viewsRouter.get('/carts/:cid', async (req, res) => {
+  const { cid } = req.params;
+  // set the helpers
+  helpers.comparison({
+    handlebars: handlebars
+  });
+
+  try {
+    const cart = await CartService.getCart(cid);
+    const products = cart.products.map(p => p.toObject());
+    
+    res.render('cart', {
+      style: 'style.css',
+      products, 
+      cid
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -42,7 +87,7 @@ viewsRouter.get('/chat', async (req, res) => {
 
     // This is because handlebars for safety reasons won't allow to access directly to the response
     const messages = messagesResponse.map(item => item.toObject());
-    
+
     res.render('chat', {
       style: 'style.css',
       messages

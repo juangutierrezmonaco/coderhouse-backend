@@ -55,6 +55,27 @@ export async function createCart(req, res) {
   }
 }
 
+export async function updateCart(req, res) {
+  const { cid } = req.params;
+  const { products } = req.body;
+
+  try {
+    const cart = await CartService.updateCart(cid, products)
+
+    res.status(200).json({
+      data: cart,
+      status: STATUS.SUCCESS,
+      error: ''
+    });
+  } catch (error) {
+    res.status(400).json({
+      data: null,
+      status: STATUS.FAIL,
+      error: error.message
+    });
+  }
+}
+
 export async function deleteCart(req, res) {
   const { cid } = req.params;
 
@@ -99,7 +120,7 @@ export async function addProduct(req, res) {
 export async function updateProduct(req, res) {
   const { cid, pid } = req.params;
   const { quantity } = req.body;
-  
+
   try {
     const cart = await CartService.updateProduct(cid, pid, quantity);
 

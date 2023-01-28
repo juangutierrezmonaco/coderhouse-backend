@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import mongooseDelete from "mongoose-delete";
+import pagination from 'mongoose-paginate-v2';
 
 const schema = new Schema(
   {
@@ -28,8 +29,8 @@ const schema = new Schema(
       type: Number,
       required: true
     },
-    category: {
-      type: String,
+    categories: {
+      type: [String],
       required: true
     },
     thumbnails: {
@@ -41,5 +42,6 @@ const schema = new Schema(
   }
 );
 
+schema.plugin(pagination);
 schema.plugin(mongooseDelete, { deletedAt: true });
 export const ProductModel = model('products', schema);

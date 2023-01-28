@@ -1,22 +1,13 @@
 import * as ProductService from '../services/product.service.js';
 import { STATUS } from '../constants/constants.js';
+import { successResponse, errorResponse } from '../utils/response.js';
 
 export async function getProducts(req, res) {
-  const { limit } = req.query;
-
   try {
-    const products = await ProductService.getProducts(limit);
-    res.status(200).json({
-      data: products,
-      status: STATUS.SUCCESS,
-      error: ''
-    })
+    const data = await ProductService.getProducts(req.query);
+    res.status(200).json(successResponse(data, req))
   } catch (error) {
-    res.status(400).json({
-      data: null,
-      status: STATUS.FAIL,
-      error: error.message
-    })
+    res.status(400).json(errorResponse(error))
   }
 }
 
@@ -39,6 +30,7 @@ export async function getProduct(req, res) {
     })
   }
 }
+
 export async function createProduct(req, res) {
   try {
     const { body } = req;

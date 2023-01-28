@@ -1,8 +1,20 @@
 import { ProductModel } from '../models/product.model.js';
 
-export async function getProducts(limit) {
+export async function getProducts({ limit = 10, page = 1, sort, category, stock }) {
   try {
-    const products = await ProductModel.find({ deleted: false }).limit(limit);
+
+    const query = { deleted: false }
+    if(category !== undefined) query.categories = category;
+    if(stock !== undefined) query.stock = { $gt: 0 };
+    
+    const paginateOptions = {
+      lean: true,
+      limit,
+      page,
+      sort: { price: sort },
+    }
+
+    const products = await ProductModel.paginate(query, paginateOptions)
     return products;
   } catch (error) {
     throw new Error(error.message);
@@ -20,6 +32,7 @@ export async function getProduct(pid) {
     throw new Error(error.message);
   }
 }
+
 export async function createProduct(productData) {
   try {
     const product = await ProductModel.create(productData);

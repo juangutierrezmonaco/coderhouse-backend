@@ -5,10 +5,31 @@ import * as MessageService from '../services/message.service.js';
 import { Router } from "express";
 import * as ProductService from '../services/product.service.js';
 import * as CartService from '../services/cart.service.js';
+import { auth } from "../middlewares/auth.middleware.js";
 
 const viewsRouter = Router();
 
 viewsRouter.get('/', async (req, res) => {
+  try {
+    res.render('login', {
+      style: 'style.css'
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+viewsRouter.get('/signup', async (req, res) => {
+  try {
+    res.render('signup', {
+      style: 'style.css'
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+viewsRouter.get('/products', auth, async (req, res) => {
   try {
     // set the helpers
     helpers.comparison({
@@ -35,6 +56,7 @@ viewsRouter.get('/', async (req, res) => {
 
     res.render('home', {
       style: 'style.css',
+      notAuth: true,
       products: docs,
       page,
       links,
@@ -46,13 +68,14 @@ viewsRouter.get('/', async (req, res) => {
   }
 });
 
-viewsRouter.get('/realtimeproducts', async (req, res) => {
+viewsRouter.get('/realtimeproducts', auth, async (req, res) => {
   try {
     const productsResponse = await ProductService.getProducts(req.query);
     const products = productsResponse.docs;
 
     res.render('realTimeProducts', {
       style: 'style.css',
+      notAuth: true,
       products
     });
   } catch (error) {
@@ -73,6 +96,7 @@ viewsRouter.get('/carts/:cid', async (req, res) => {
     
     res.render('cart', {
       style: 'style.css',
+      notAuth: true,
       products, 
       cid
     });

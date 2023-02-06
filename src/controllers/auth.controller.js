@@ -4,10 +4,9 @@ import { STATUS } from "../constants/constants.js";
 export async function login(req, res) {
   try {
     const { email, password } = req.body;
-    const logged = await AuthService.login(email, password);
-    if (logged) {
-      req.session.logged = true;
-      req.session.email = email
+    const userId = await AuthService.login(email, password);
+    if (userId) {
+      req.session.userId = userId;
 
       res.json({
         data: "User logged in successfully.",

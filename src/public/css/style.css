@@ -35,10 +35,16 @@ input[type="search"]::-webkit-search-results-decoration {
   -webkit-appearance: none;
 }
 
-body {
-  min-height: 100vh;
+.main-container {
+  min-height: calc(
+      100vh - 56px
+  ); /* Header's height */
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  gap: 50px;
+  padding: 50px;
 }
 
 .logoutButton {

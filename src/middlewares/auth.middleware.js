@@ -1,7 +1,7 @@
 import { STATUS } from "../constants/constants.js";
 
 export function auth(req, res, next) {
-  if (req.session.logged) {
+  if (req.session.userId) {
     req.session.touch();
     next();
   } else {

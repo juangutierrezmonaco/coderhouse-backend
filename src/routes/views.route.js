@@ -36,8 +36,8 @@ viewsRouter.get('/products', auth, async (req, res) => {
     helpers.comparison({
       handlebars: handlebars
     });
-
-    const user = await UserService.getUser(req.session.email);
+    
+    const user = await UserService.getUserById(req.session.userId);
 
     const data = await ProductService.getProducts(req.query);
     const { docs, prevPage, nextPage, page, totalPages } = data;

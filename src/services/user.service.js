@@ -24,7 +24,7 @@ export async function getUser(email) {
 
 export async function getUserById(uid) {
   try {
-    const user = await UserModel.findById(uid);
+    const user = await UserModel.findById(uid).lean();
 
     if (!user) throw new Error(`The user with the id:${uid} doesn't exist.`);
 

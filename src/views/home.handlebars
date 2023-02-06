@@ -1,4 +1,19 @@
 <main class="container">
+
+  <div>
+    <h2>¡Bienvenido!</h2>
+    <h3>Datos del usuario actual</h3>
+    <div>
+      <div>Nombre: {{user.first_name}}</div>
+      <div>Apellido: {{user.last_name}}</div>
+      <div>Edad: {{user.age}}</div>
+      <div>Email: {{user.email}}</div>
+      <div>Rol: {{user.role}}</div>
+      <div>Id: {{user._id}}</div>
+    </div>
+  </div>
+
+
   <h1>Productos</h1>
   <ul class="p-0">
     {{#each products}}
@@ -52,7 +67,5 @@
   </nav>
 </main>
 
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/js/utils.js"></script>
 <script src="/js/home.js"></script>

@@ -1,10 +1,11 @@
 import handlebars from 'handlebars';
 import helpers from 'handlebars-helpers';
-
-import * as MessageService from '../services/message.service.js';
 import { Router } from "express";
+
+import * as UserService from "../services/user.service.js";
 import * as ProductService from '../services/product.service.js';
 import * as CartService from '../services/cart.service.js';
+import * as MessageService from '../services/message.service.js';
 import { auth } from "../middlewares/auth.middleware.js";
 
 const viewsRouter = Router();
@@ -36,6 +37,8 @@ viewsRouter.get('/products', auth, async (req, res) => {
       handlebars: handlebars
     });
 
+    const user = await UserService.getUser(req.session.email);
+
     const data = await ProductService.getProducts(req.query);
     const { docs, prevPage, nextPage, page, totalPages } = data;
 
@@ -57,6 +60,7 @@ viewsRouter.get('/products', auth, async (req, res) => {
     res.render('home', {
       style: 'style.css',
       notAuth: true,
+      user,
       products: docs,
       page,
       links,

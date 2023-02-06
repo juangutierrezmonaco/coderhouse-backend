@@ -7,6 +7,7 @@ export async function login(req, res) {
     const logged = await AuthService.login(email, password);
     if (logged) {
       req.session.logged = true;
+      req.session.email = email
 
       res.json({
         data: "User logged in successfully.",
@@ -34,7 +35,7 @@ export async function logout(req, res) {
     req.session.destroy((err) => {
       if (err) throw err;
 
-      res.status(400).json({
+      res.json({
         data: "User logged out successfully",
         status: STATUS.SUCCESS,
         error: "",

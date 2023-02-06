@@ -11,7 +11,7 @@ export async function getUsers() {
 
 export async function getUser(email) {
   try {
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email }).lean();
 
     if (!user)
       throw new Error(`The user with the email:${email} doesn't exist.`);
@@ -41,6 +41,12 @@ export async function createUser(userData) {
     const userExists = await UserModel.findOne({ email });
     if (userExists)
       throw new Error(`The user with the email:${email} already exists.`);
+
+    // Check if is admin
+    const [username, domain] = email.split('@');
+    if (username.includes("adminCoder") && domain.includes("coder.com")) {
+      userData.role = 'admin';
+    }
 
     const user = await UserModel.create(userData);
     return user;

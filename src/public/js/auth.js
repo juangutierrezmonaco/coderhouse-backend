@@ -24,8 +24,8 @@ loginForm && loginForm.addEventListener("submit", (e) => {
 
 signupForm && signupForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const firstName = e.target.firstName.value;
-  const lastName = e.target.lastName.value;
+  const first_name = e.target.firstName.value;
+  const last_name = e.target.lastName.value;
   const age = e.target.age.value;
   const email = e.target.email.value;
   const password = e.target.password.value;
@@ -33,16 +33,15 @@ signupForm && signupForm.addEventListener("submit", (e) => {
   // Send a request to the backend to post a login
   axios({
     method: "post",
-    url: "/api/auth/login",
-    data: { firstName, lastName, age, email, password },    
+    url: "/api/users",
+    data: { first_name, last_name, age, email, password },    
   })
-  .then((res) => {
-    console.log(res)
-    toast("Ingreso correcto", "success");
+  .then(() => {
+    // If user was created successfully
+    window.location.href = "/";
   })
   .catch((err) => {
     const {error} = err.response.data;
-    console.log(err)
     toast("Hubo un error: ", "error", error);
   })
 });

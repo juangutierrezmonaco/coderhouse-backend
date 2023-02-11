@@ -1,4 +1,5 @@
 import { UserModel } from "../models/user.model.js";
+import { createHash } from "../utils/auth.util.js";
 
 export async function getUsers() {
   try {
@@ -43,10 +44,13 @@ export async function createUser(userData) {
       throw new Error(`The user with the email:${email} already exists.`);
 
     // Check if is admin
-    const [username, domain] = email.split('@');
+    const [username, domain] = email.split("@");
     if (username.includes("adminCoder") && domain.includes("coder.com")) {
-      userData.role = 'admin';
+      userData.role = "admin";
     }
+
+    // Hash password
+    userData.password = createHash(userData.password);
 
     const user = await UserModel.create(userData);
     return user;
@@ -55,11 +59,33 @@ export async function createUser(userData) {
   }
 }
 
-export async function updateUser(uid, userData) {
+export async function updateUser(email, userData) {
   try {
-    const user = await UserModel.findByIdAndUpdate(uid, userData, {
+    // in case of trying to update password
+    userData.password = undefined;
+
+    const user = await UserModel.findOneAndUpdate({ email }, userData, {
       new: true,
-    });
+    }).lean();
+    return user;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+/* if (!updatePassword) {
+  userData.password = undefined;
+} else {
+  userData.password = createHash(userData.password);
+} */
+
+export async function updatePassword(email, userData) {
+  try {
+    // eventually i have to verify the password (it's long enough, it's secure, it's not empty, etc)
+    userData.password = createHash(userData.password);
+
+    const user = await UserModel.findOneAndUpdate({ email }, userData, {
+      new: true,
+    }).lean();
     return user;
   } catch (error) {
     throw new Error(error.message);

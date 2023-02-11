@@ -8,7 +8,8 @@ usersRouter.get('/', auth, UserController.getUsers);
 usersRouter.get('/:email', auth, UserController.getUser);
 usersRouter.get('/id/:uid', auth, UserController.getUserById);
 usersRouter.post('/', UserController.createUser);
-usersRouter.put('/:uid', auth, UserController.updateUser);
-usersRouter.delete('/:uid', auth, UserController.deleteUser);
+usersRouter.put('/:email', auth, UserController.updateUser);
+usersRouter.put('/password/:email', auth, UserController.updatePassword);
+usersRouter.delete('/:email', auth, UserController.deleteUser);
 
 export { usersRouter };

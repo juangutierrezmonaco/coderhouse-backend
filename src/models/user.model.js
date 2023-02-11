@@ -30,6 +30,9 @@ const schema = new Schema(
       default: "user",
       enum: ["admin", "user"],
     },
+    avatar_url: {
+      type: String,
+    }
   },
   {
     timestamps: true,

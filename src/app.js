@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 import cookie from "cookie-parser";
 import session from "express-session";
 import mongoStore from "connect-mongo";
+import passport from 'passport';
 
 import { authRouter } from "./routes/auth.route.js";
 import { usersRouter } from "./routes/user.route.js";
@@ -12,7 +13,10 @@ import { productsRouter } from "./routes/product.route.js";
 import { cartsRouter } from "./routes/cart.route.js";
 import { messagesRouter } from "./routes/message.route.js";
 import { viewsRouter } from "./routes/views.route.js";
-import "./config/db.js";
+import { passportLocalRouter } from "./routes/passportLocal.route.js";
+import { passportGithubRouter } from "./routes/passportGithub.route.js";
+
+import "./config/db.config.js";
 
 /* For using env variables */
 dotenv.config();
@@ -46,8 +50,14 @@ app.use(
   })
 );
 
+/* Passport setup */
+app.use(passport.initialize());
+app.use(passport.session());
+
 /* Routes setup */
 app.use("/api/auth", authRouter);
+app.use("/api/passportLocal", passportLocalRouter);
+app.use("/api/github", passportGithubRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);

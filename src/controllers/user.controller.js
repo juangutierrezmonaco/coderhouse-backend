@@ -68,7 +68,7 @@ export async function createUser(req, res) {
   try {
     const { body } = req;
     const newUser = await UserService.createUser(body);
-    delete newUser.password;
+    newUser.password = undefined;
 
     res.status(201).json({
       data: newUser,
@@ -85,11 +85,33 @@ export async function createUser(req, res) {
 }
 
 export async function updateUser(req, res) {
-  const { uid } = req.params;
+  const { email } = req.params;
 
   try {
     const { body } = req;
-    const user = await UserService.updateUser(uid, body);
+    const user = await UserService.updateUser(email, body);
+    user.password = undefined;
+
+    res.status(200).json({
+      data: user,
+      status: STATUS.SUCCESS,
+      error: "",
+    });
+  } catch (error) {
+    res.status(400).json({
+      data: null,
+      status: STATUS.FAIL,
+      error: error.message,
+    });
+  }
+}
+
+export async function updatePassword(req, res) {
+  const { email } = req.params;
+
+  try {
+    const { body } = req;
+    const user = await UserService.updatePassword(email, body);
     user.password = undefined;
 
     res.status(200).json({
@@ -107,10 +129,10 @@ export async function updateUser(req, res) {
 }
 
 export async function deleteUser(req, res) {
-  const { uid } = req.params;
+  const { email } = req.params;
 
   try {
-    await UserService.deleteUser(uid);
+    await UserService.deleteUser(email);
 
     res.status(200).json({
       data: null,

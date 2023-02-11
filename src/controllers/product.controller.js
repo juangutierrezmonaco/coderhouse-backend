@@ -1,6 +1,6 @@
 import * as ProductService from '../services/product.service.js';
 import { STATUS } from '../constants/constants.js';
-import { successResponse, errorResponse } from '../utils/response.js';
+import { successResponse, errorResponse } from '../utils/response.util.js';
 
 export async function getProducts(req, res) {
   try {

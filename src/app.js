@@ -1,11 +1,12 @@
 import express from "express";
-import dotenv from "dotenv";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
+import passport from 'passport';
 import cookie from "cookie-parser";
 import session from "express-session";
 import mongoStore from "connect-mongo";
-import passport from 'passport';
+import cors from "cors";
+
 
 import { authRouter } from "./routes/auth.route.js";
 import { usersRouter } from "./routes/user.route.js";
@@ -17,9 +18,7 @@ import { passportLocalRouter } from "./routes/passportLocal.route.js";
 import { passportGithubRouter } from "./routes/passportGithub.route.js";
 
 import "./config/db.config.js";
-
-/* For using env variables */
-dotenv.config();
+import { config } from "./config/config.js";
 
 /* Express setup */
 const app = express();
@@ -32,8 +31,7 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", "src/views");
 
-/* Coockies/Sessions setup */
-app.use(cookie());
+/* Sessions setup */
 app.use(
   session({
     store: new mongoStore({
@@ -50,6 +48,13 @@ app.use(
   })
 );
 
+
+/* Cookies setup */
+app.use(cookie());
+
+/* Coors setup */
+app.use(cors());
+
 /* Passport setup */
 app.use(passport.initialize());
 app.use(passport.session());
@@ -65,7 +70,7 @@ app.use("/api/messages", messagesRouter);
 app.use("/", viewsRouter);
 
 /* Http server */
-const PORT = process.env.PORT || 8080;
+const PORT = config.port;
 const httpServer = app.listen(PORT, () =>
   console.log(`🚀 Server started on port http://localhost:${PORT}`)
 );

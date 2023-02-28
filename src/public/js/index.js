@@ -6,7 +6,7 @@ logoutButton && logoutButton.addEventListener('click', () => {
     url: "/api/auth/logout",  
   })
   .then(() => {
-    console.log("Todo bien")
+    console.log("Salió correctamente.")
     window.location.href = "/";
   })
   .catch((err) => {

@@ -57,7 +57,7 @@ viewsRouter.get('/products', auth, async (req, res) => {
     const prevLink = prevPage ? `${currentUrl}&page=${prevPage}` : null;
     const nextLink = nextPage ? `${currentUrl}&page=${nextPage}` : null;
 
-    res.render('home', {
+    res.render('products', {
       style: 'style.css',
       notAuth: true,
       user,

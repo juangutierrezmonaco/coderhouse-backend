@@ -10,7 +10,7 @@ export async function fail(req, res) {
 }
 
 export async function signup(req, res) {
-  res.status(201).json({
+  res.status(200).json({
     data: req.user,
     status: STATUS.SUCCESS,
     error: "",
@@ -20,12 +20,12 @@ export async function signup(req, res) {
 export async function login(req, res) {
   try {
     req.session.userId = req.user._id;
-    res.status(201).json({
+    res.status(200).json({
       data: "User logged in successfully.",
       status: STATUS.SUCCESS,
       error: "",
     });
   } catch (error) {
-    console.log("ERROR SALTEADO EN PASTPOST");
+    console.log("ERROR SALTEADO EN PASSPORT");
   }
 }

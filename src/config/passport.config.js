@@ -4,9 +4,8 @@ import passportGithub from "passport-github2";
 import { UserModel } from "../models/user.model.js";
 import * as UserService from "../services/user.service.js";
 import * as AuthService from "../services/auth.service.js";
-import dotenv from "dotenv";
 
-dotenv.config();
+import { config } from "./config.js";
 
 passport.serializeUser(function (user, done) {
   console.log("Serializing");
@@ -27,12 +26,10 @@ passport.use(
     async function (req, username, password, done) {
       try {
         const userExists = await UserModel.findOne({ email: username });
-        if (userExists) {
-          return done("User already exists", false);
-        } else {
-          const newUser = await UserService.createUser(req.body);
-          return done(null, newUser);
-        }
+        if (userExists) return done("User already exists", false);
+
+        const newUser = await UserService.createUser(req.body);
+        return done(null, newUser);
       } catch (error) {
         throw new Error(error.message);
       }
@@ -47,12 +44,10 @@ passport.use(
     async function (req, username, password, done) {
       try {
         const userId = await AuthService.login(username, password);
-        if (userId) {
-          const user = await UserModel.findById(userId);
-          return done(null, user);
-        } else {
-          return done("login error", false);
-        }
+        if (!userId) return done("login error", false);
+
+        const user = await UserModel.findById(userId);
+        return done(null, user);
       } catch (error) {
         throw new Error(error.message);
       }
@@ -64,9 +59,9 @@ passport.use(
   "githubLogin",
   new passportGithub.Strategy(
     {
-      clientID: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: "http://localhost:8080/api/github/callback"
+      clientID: config.ghClientId,
+      clientSecret: config.ghClientSecret,
+      callbackURL: "http://localhost:8080/api/github/callback",
     },
     async function (accessToken, refreshToken, profile, done) {
       try {
@@ -75,14 +70,12 @@ passport.use(
           last_name: profile._json.name,
           age: 18,
           email: profile._json.email,
-          password: process.env.SECRET,
+          password: config.secret,
           avatar_url: profile._json.avatar_url
         };
 
-        console.log(userData)
-
-        // if the email or data is not public 
-        if (userData.email === null){
+        // if the email or data is not public
+        if (userData.email === null) {
           return done("your email or some of your data is private", false);
         }
 
@@ -91,13 +84,13 @@ passport.use(
         const userExists = await UserModel.findOne({ email: userData.username });
 
         if (userExists) {
-          const userId = await AuthService.login(userData.email, userData.password);        
+          const userId = await AuthService.login(userData.email, userData.password);
           const user = await UserModel.findById(userId);
           return done(null, user);
         } else {
           const newUser = await UserService.createUser(userData);
           return done(null, newUser);
-        }       
+        }
       } catch (error) {
         throw new Error(error.message);
       }

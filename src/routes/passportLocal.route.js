@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { passport } from "../config/passport.config.js";
 import * as PassportLocalController from "../controllers/passportLocal.controller.js";
+import { passportCall } from "../middlewares/passport.middleware.js";
 
 const passportLocalRouter = Router();
 
@@ -21,5 +22,9 @@ passportLocalRouter.post(
   }),
   PassportLocalController.login
 );
+
+passportLocalRouter.get('/current', passportCall('login'), (req, res) => {
+  res.send(req.user)
+})
 
 export { passportLocalRouter };

@@ -32,6 +32,10 @@ const schema = new Schema(
     },
     avatar_url: {
       type: String,
+    },
+    cart: {
+      type: Schema.Types.ObjectId,
+      ref: 'carts',
     }
   },
   {
